@@ -4,8 +4,8 @@ if __name__ == "__main__":
     print("Start\n")
     ser = serial.Serial('/dev/ttyUSB0', 9600)
 
-    print(ser.read())
+    data = ser.read()
     print("compete read")
-    ser.write('A')
+    ser.write(data)
     print("write Data")
     ser.close()
