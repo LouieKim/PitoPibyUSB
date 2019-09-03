@@ -1,3 +1,7 @@
+import serial
+
 if __name__ == "__main__":
-    print("test01")
-    
+    ser = serial.Serial('/dev/ttyUSB0', 9600)
+
+    while(1):
+        print(ser.readline())
