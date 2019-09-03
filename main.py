@@ -6,6 +6,6 @@ if __name__ == "__main__":
 
     print(ser.read())
     print("compete read")
-    ser.write("A")
+    ser.write('A')
     print("write Data")
     ser.close()
