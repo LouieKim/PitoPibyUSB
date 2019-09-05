@@ -22,7 +22,7 @@ def main(argv):
     print("Start %s \n" % OPTION)
     ser = serial.Serial('/dev/ttyUSB0', 9600)
     print(ser.name)
-    
+
     if OPTION == RECEIVE:
         while(1):
             data = ser.read(1)
@@ -42,4 +42,7 @@ def main(argv):
     ser.close()
 
 if __name__ == "__main__":
-    main(sys.argv)
+    try:
+        main(sys.argv)
+    except KeyboardInterrupt:
+        print("test")
