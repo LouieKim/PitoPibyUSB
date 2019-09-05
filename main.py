@@ -13,7 +13,7 @@ if __name__ == "__main__":
         data = ser.read()
         print(data)
         print("compete read")
-        write_data(data)
+        write_data(str(data))
         print("write Data")
 
     ser.close()
