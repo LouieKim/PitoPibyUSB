@@ -1,4 +1,5 @@
 import serial
+import curses
 
 def write_data(data):
     f = open("test_txt.txt", 'a')
@@ -13,7 +14,7 @@ if __name__ == "__main__":
         data = ser.read()
         print(data)
         print("compete read")
-        write_data(str(data))
+        write_data(str(data, "utf-8"))
         print("write Data")
 
     ser.close()
