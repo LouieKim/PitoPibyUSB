@@ -1,12 +1,8 @@
 import serial
 
 def write_data(data):
-    f = open("test_txt.txt", 'w')
-
-    for i in range(11, 21):
-        data = "%d Line\n" % i
-        f.write(data)
-
+    f = open("test_txt.txt", 'a')
+    f.write(data)
     f.close()
 
 if __name__ == "__main__":
