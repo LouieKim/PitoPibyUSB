@@ -19,4 +19,5 @@ if __name__ == "__main__":
         print("compete read")
         write_data(data)
         print("write Data")
-        ser.close()
+
+    ser.close()
