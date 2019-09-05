@@ -1,6 +1,9 @@
 import serial
-import curses
 import sys
+import time
+
+RECEIVE = "R"
+SEND = "S"
 
 def write_data(data):
     f = open("test_txt.txt", 'a')
@@ -17,12 +20,22 @@ def main(argv):
     print("Start %s \n" % OPTION)
     ser = serial.Serial('/dev/ttyUSB0', 9600)
 
-    while(1):
-        data = ser.read(1)
-        print(data)
-        print("compete read")
-        write_data(str(data, "utf-8"))
-        print("write Data")
+    if OPTION == RECEIVE
+        while(1):
+            data = ser.read(1)
+            print("compete read")
+            write_data(str(data, "utf-8"))
+            print("write Data")
+
+    elif OPTION == SEND:
+        while(1):
+            ser.write('a')
+            print("SEND DATA")
+            time.sleep(1)
+
+    else:
+        print("wrong args")
+
     ser.close()
 
 if __name__ == "__main__":
