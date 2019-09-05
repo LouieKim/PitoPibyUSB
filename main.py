@@ -29,7 +29,7 @@ def main(argv):
 
     elif OPTION == SEND:
         while(1):
-            ser.write('a')
+            ser.write(b'a')
             print("SEND DATA")
             time.sleep(1)
 
