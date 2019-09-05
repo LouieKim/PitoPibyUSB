@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     while(1):
         data = ser.read()
-        print(\n data)
+        print(data)
         print("compete read")
         write_data(data)
         print("write Data")
