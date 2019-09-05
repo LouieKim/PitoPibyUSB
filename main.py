@@ -10,7 +10,11 @@ def write_data(data):
     f.close()
 
 def main(argv):
-    print("Start %s \n" % argv)
+
+    FILE_NAME = argv[0]
+    OPTION = argv[1]
+
+    print("Start %s \n" % OPTION)
     ser = serial.Serial('/dev/ttyUSB0', 9600)
 
     while(1):
