@@ -20,7 +20,7 @@ def main(argv):
     print("Start %s \n" % OPTION)
     ser = serial.Serial('/dev/ttyUSB0', 9600)
 
-    if OPTION == RECEIVE
+    if OPTION == RECEIVE:
         while(1):
             data = ser.read(1)
             print("compete read")
