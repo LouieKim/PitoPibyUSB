@@ -1,5 +1,6 @@
 import serial
 import curses
+import sys
 
 def write_data(data):
     f = open("test_txt.txt", 'a')
