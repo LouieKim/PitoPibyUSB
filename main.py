@@ -5,22 +5,23 @@ import time
 RECEIVE = "R"
 SEND = "S"
 
+f = open("test_txt.txt", 'a')
+ser = serial.Serial('/dev/ttyUSB0', 9600)
+
 def write_data(data):
     try:
-        f = open("test_txt.txt", 'a')
         f.write(data)
         print("Input Data: %s" % data)
     except Exception as e:
         print(e)
     finally:
-        f.close()
+        pass
 
 def main(argv):
     FILE_NAME = argv[0]
     OPTION = argv[1]
 
     print("Start %s \n" % OPTION)
-    ser = serial.Serial('/dev/ttyUSB0', 9600)
     print(ser.name)
 
     if OPTION == RECEIVE:
@@ -39,10 +40,9 @@ def main(argv):
     else:
         print("wrong args")
 
-    ser.close()
-
 if __name__ == "__main__":
     try:
         main(sys.argv)
     except KeyboardInterrupt:
-        print("test")
+        f.close()
+        ser.close()
