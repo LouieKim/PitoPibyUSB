@@ -8,7 +8,7 @@ SEND = "S"
 f = open("test_txt.txt", 'a')
 ser = serial.Serial('/dev/ttyUSB0', 9600)
 
-def write_data(data):
+def record_data(data):
     try:
         f.write(data)
         print("Input Data: %s" % data)
@@ -24,21 +24,18 @@ def main(argv):
     print("Start %s \n" % OPTION)
     print(ser.name)
 
-    if OPTION == RECEIVE:
-        while(1):
-            data = ser.read(1)
-            print("compete read")
-            write_data(str(data, "utf-8"))
-            print("write Data")
+    while(1):
 
-    elif OPTION == SEND:
-        while(1):
-            ser.write(b'acacacac')
-            print("SEND DATA")
-            time.sleep(1)
+        data = ser.read(1)
+        print("compete read")
 
-    else:
-        print("wrong args")
+        record_data(str(data, "utf-8"))
+        print("compete record Data")
+
+        ser.write(bytes(data, 'UTF-8'))
+        print("SEND DATA")
+
+        time.sleep(1)
 
 if __name__ == "__main__":
     try:
