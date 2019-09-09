@@ -6,7 +6,8 @@ RECEIVE = "R"
 SEND = "S"
 
 f = open("test_txt.txt", 'a')
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+recive_ser = serial.Serial('/dev/ttyUSB0', 9600)
+send_ser = serial.Serial('/dev/ttyUSB1', 9600)
 
 def record_data(data):
     try:
@@ -22,17 +23,18 @@ def main(argv):
     OPTION = argv[1]
 
     print("Start %s \n" % OPTION)
-    print(ser.name)
+    print("Recive_ser: %s \n" % recive_ser.name)
+    print("Send_ser: %s \n" % send_ser.name)
 
     while(1):
 
-        data = ser.read(1)
+        data = recive_ser.read(1)
         print("compete read")
 
         record_data(str(data, "utf-8"))
         print("compete record Data")
 
-        ser.write(bytes(data, 'UTF-8'))
+        send_ser.write(bytes(data, 'UTF-8'))
         print("SEND DATA")
 
         time.sleep(1)
@@ -42,6 +44,7 @@ if __name__ == "__main__":
         main(sys.argv)
     except KeyboardInterrupt:
         f.close()
-        ser.close()
+        recive_ser.close()
+        send_ser.close()
         print("Exit")
         exit()
