@@ -34,10 +34,10 @@ def main(argv):
         record_data(str(data, "utf-8"))
         print("compete record Data")
 
-        send_ser.write(bytes(data, 'UTF-8'))
+        send_ser.write(data)
         print("SEND DATA")
 
-        time.sleep(1)
+        #time.sleep(1)
 
 if __name__ == "__main__":
     try:
