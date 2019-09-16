@@ -1,9 +1,14 @@
+from socket import *
 import serial
 import sys
 import time
 
 RECEIVE = "R"
 SEND = "S"
+
+clientSock = socket(AF_INET, SOCK_STREAM)
+clientSock.connect(('192.168.10.4', 8080))
+print('Success Connecting Server')
 
 f = open("test_txt.txt", 'a')
 recive_ser = serial.Serial('/dev/ttyUSB0', 9600)
@@ -35,7 +40,12 @@ def main(argv):
         print("compete record Data")
 
         send_ser.write(data)
-        print("SEND DATA")
+        print("SEND DATA To USB")
+
+        clientSock.send('I am a client'.encode('utf-8'))
+        print('Send message to Server')
+        data = clientSock.recv(1024)
+        print('Receive Data from Server : ', data.decode('utf-8'))
 
         #time.sleep(1)
 
