@@ -1,25 +1,27 @@
 #!/usr/bin/env python
 """
-Pymodbus Synchronous Server Example
+Pymodbus Asynchronous Server Example
 --------------------------------------------------------------------------
 
-The synchronous server is implemented in pure python without any third
-party libraries (unless you need to use the serial protocols which require
-pyserial). This is helpful in constrained or old environments where using
-twisted is just not feasible. What follows is an example of its use:
+The asynchronous server is a high performance implementation using the
+twisted library as its backend.  This allows it to scale to many thousands
+of nodes which can be helpful for testing monitoring software.
 """
 # --------------------------------------------------------------------------- #
 # import the various server implementations
 # --------------------------------------------------------------------------- #
-from pymodbus.server.sync import StartTcpServer
-from pymodbus.server.sync import StartUdpServer
-from pymodbus.server.sync import StartSerialServer
+from pymodbus.server.asynchronous import StartTcpServer
+from pymodbus.server.asynchronous import StartUdpServer
+from pymodbus.server.asynchronous import StartSerialServer
 
 from pymodbus.device import ModbusDeviceIdentification
-from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSparseDataBlock
+from pymodbus.datastore import ModbusSequentialDataBlock
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
+from pymodbus.transaction import (ModbusRtuFramer,
+                                  ModbusAsciiFramer,
+                                  ModbusBinaryFramer)
+from custom_message import CustomModbusRequest
 
-from pymodbus.transaction import ModbusRtuFramer, ModbusBinaryFramer
 # --------------------------------------------------------------------------- #
 # configure the service logging
 # --------------------------------------------------------------------------- #
@@ -31,14 +33,14 @@ log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 
 
-def run_server():
+def run_async_server():
     # ----------------------------------------------------------------------- #
     # initialize your data store
     # ----------------------------------------------------------------------- #
     # The datastores only respond to the addresses that they are initialized to
-    # Therefore, if you initialize a DataBlock to addresses of 0x00 to 0xFF, a
-    # request to 0x100 will respond with an invalid address exception. This is
-    # because many devices exhibit this kind of behavior (but not all)::
+    # Therefore, if you initialize a DataBlock to addresses from 0x00 to 0xFF,
+    # a request to 0x100 will respond with an invalid address exception.
+    # This is because many devices exhibit this kind of behavior (but not all)
     #
     #     block = ModbusSequentialDataBlock(0x00, [0]*0xff)
     #
@@ -58,7 +60,7 @@ def run_server():
     #     store = ModbusSlaveContext()
     #
     # Finally, you are allowed to use the same DataBlock reference for every
-    # table or you may use a separate DataBlock for each table.
+    # table or you you may use a seperate DataBlock for each table.
     # This depends if you would like functions to be able to access and modify
     # the same data or not::
     #
@@ -69,8 +71,8 @@ def run_server():
     # respond with different slave contexts for different unit ids. By default
     # it will return the same context for every unit id supplied (broadcast
     # mode).
-    # However, this can be overloaded by setting the single flag to False and
-    # then supplying a dictionary of unit id to context mapping::
+    # However, this can be overloaded by setting the single flag to False
+    # and then supplying a dictionary of unit id to context mapping::
     #
     #     slaves  = {
     #         0x01: ModbusSlaveContext(...),
@@ -91,7 +93,8 @@ def run_server():
         co=ModbusSequentialDataBlock(0, [17]*100),
         hr=ModbusSequentialDataBlock(0, [17]*100),
         ir=ModbusSequentialDataBlock(0, [17]*100))
-
+    store.register(CustomModbusRequest.function_code, 'cm',
+                   ModbusSequentialDataBlock(0, [17] * 100))
     context = ModbusServerContext(slaves=store, single=True)
 
     # ----------------------------------------------------------------------- #
@@ -102,7 +105,7 @@ def run_server():
     identity = ModbusDeviceIdentification()
     identity.VendorName = 'Pymodbus'
     identity.ProductCode = 'PM'
-    identity.VendorUrl = 'http://github.com/riptideio/pymodbus/'
+    identity.VendorUrl = 'http://github.com/bashwork/pymodbus/'
     identity.ProductName = 'Pymodbus Server'
     identity.ModelName = 'Pymodbus Server'
     identity.MajorMinorRevision = '2.2.0'
@@ -110,31 +113,38 @@ def run_server():
     # ----------------------------------------------------------------------- #
     # run the server you want
     # ----------------------------------------------------------------------- #
-    # Tcp:
-    # StartTcpServer(context, identity=identity, address=("localhost", 5020))
 
-    # TCP with different framer
-    # StartTcpServer(context, identity=identity,
-    #                framer=ModbusRtuFramer, address=("0.0.0.0", 5020))
+    # TCP Server
 
-    # Udp:
-    # StartUdpServer(context, identity=identity, address=("0.0.0.0", 5020))
+    # StartTcpServer(context, identity=identity, address=("localhost", 5020),
+    #                custom_functions=[CustomModbusRequest])
 
-    # Ascii:
+    # TCP Server with deferred reactor run
+
+    # from twisted.internet import reactor
+    # StartTcpServer(context, identity=identity, address=("localhost", 5020),
+    #                defer_reactor_run=True)
+    # reactor.run()
+
+    # Server with RTU framer
+    # StartTcpServer(context, identity=identity, address=("localhost", 5020),
+    #                framer=ModbusRtuFramer)
+
+    # UDP Server
+    # StartUdpServer(context, identity=identity, address=("127.0.0.1", 5020))
+
+    # RTU Server
+    StartSerialServer(context, identity=identity,
+    port='/dev/ttyp0', framer=ModbusRtuFramer)
+
+    # ASCII Server
     # StartSerialServer(context, identity=identity,
-    #                    port='/dev/ttyp0', timeout=1)
+    #                   port='/dev/ttyp0', framer=ModbusAsciiFramer)
 
-    # RTU:
-    StartSerialServer(context, framer=ModbusRtuFramer, identity=identity,
-    port='/dev/ttyUSB0', timeout=.005, baudrate=9600)
-
-    # Binary
-    # StartSerialServer(context,
-    #                   identity=identity,
-    #                   framer=ModbusBinaryFramer,
-    #                   port='/dev/ttyp0',
-    #                   timeout=1)
+    # Binary Server
+    # StartSerialServer(context, identity=identity,
+    #                   port='/dev/ttyp0', framer=ModbusBinaryFramer)
 
 
 if __name__ == "__main__":
-    run_server()
+    run_async_server()
