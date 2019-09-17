@@ -71,9 +71,12 @@ def run_sync_client():
     from pymodbus.transaction import ModbusRtuFramer
     # client = ModbusClient('localhost', port=5020, framer=ModbusRtuFramer)
     # client = ModbusClient(method='binary', port='/dev/ptyp0', timeout=1)
+    client = ModbusClient(method='ascii', port='COM12', timeout=1)
     # client = ModbusClient(method='ascii', port='/dev/ptyp0', timeout=1)
-    client = ModbusClient(method='rtu', port='/dev/ttyUSB1', timeout=1,
-    baudrate=9600)
+    # client = ModbusClient(method='rtu', port='/dev/ttyUSB1', timeout=1,
+    # baudrate=9600)
+    # client = ModbusClient(method='rtu', port='COM12', timeout=1,
+    # baudrate=9600)
     client.connect()
 
     # ------------------------------------------------------------------------#

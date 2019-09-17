@@ -122,11 +122,14 @@ def run_server():
 
     # Ascii:
     # StartSerialServer(context, identity=identity,
-    #                    port='/dev/ttyp0', timeout=1)
+    # port='/dev/ttyp0', timeout=1)
+
+    StartSerialServer(context, identity=identity,
+    port='/dev/ttyUSB0', timeout=1)
 
     # RTU:
-    StartSerialServer(context, framer=ModbusRtuFramer, identity=identity,
-    port='/dev/ttyUSB0', timeout=.005, baudrate=9600)
+    # StartSerialServer(context, framer=ModbusRtuFramer, identity=identity,
+    # port='/dev/ttyUSB0', timeout=.005, baudrate=9600)
 
     # Binary
     # StartSerialServer(context,
