@@ -28,7 +28,8 @@ def main(argv):
         while(1):
             data = ser.read(1)
             print("compete read")
-            write_data(str(data, "utf-8"))
+            #write_data(str(data, "utf-8"))
+            print(str(data))
             print("write Data")
 
     elif OPTION == SEND:
