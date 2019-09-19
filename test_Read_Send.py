@@ -30,7 +30,6 @@ def main(argv):
             print("compete read")
             #write_data(str(data, "utf-8"))
             print(str(data))
-            print("write Data")
 
     elif OPTION == SEND:
         while(1):
