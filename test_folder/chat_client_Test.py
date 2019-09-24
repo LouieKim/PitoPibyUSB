@@ -29,11 +29,17 @@ def runChat():
       t.start()
 
       while True:
+         #my_bytes = bytearray()
+         #my_btyes.append(0301060879128753)
          msg = b'0301060879128753'
+         aa = "\x10\x20\x30"
+         print(msg)
          if msg =='/quit':
-            sock.send(msg.encode())
+            #sock.send(msg.encode())
             break
-         sock.send(msg)
+         #binary = binascii.a2b_hex ("1006000f02bcd1")
+         sock.send(aa.encode())
+         #sock.send(msg)
          time.sleep(1)
          #sock.send(msg.encode())
 
