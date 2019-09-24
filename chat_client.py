@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 
-HOST ='192.168.10.6'
+HOST ='192.168.10.4'
 PORT = 9009
 
 def rcvMsg(sock):
@@ -10,7 +10,8 @@ def rcvMsg(sock):
          data = sock.recv(1024)
          if not data:
             break
-         print(data.decode())
+         print(data)
+         #print(data.decode())
       except:
          pass
 
@@ -26,7 +27,7 @@ def runChat():
          if msg =='/quit':
             sock.send(msg.encode())
             break
-
          sock.send(msg.encode())
+         #sock.send(msg.encode())
 
 runChat()
